@@ -1,9 +1,13 @@
 package org.avaje.glue.jetty;
 
 
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.util.resource.EmptyResource;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 /**
  * Provides a Jetty Runner that can be used to run as a main method.
@@ -31,6 +35,10 @@ public class JettyRun extends BaseRunner {
     return new File("pom.xml").exists() || new File("build.gradle").exists();
   }
 
+  public WebAppContext getContext() {
+    return webapp;
+  }
+
   /**
    * Configure and run the webapp using jetty.
    */
@@ -47,16 +55,15 @@ public class JettyRun extends BaseRunner {
    */
   protected void setupForExpandedWar() {
 
-    webapp.setServerClasses(getServerClasses());
-    webapp.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
     if (resourceBase != null) {
       webapp.setResourceBase(resourceBase);
 
     } else {
       Resource base = Resource.newClassPathResource("/web-assets");
-      if (base.exists()) {
+      if (base != null && base.exists()) {
         webapp.setResourceBase(base.toString());
       } else {
+        webapp.setBaseResource(new NoResource());//EmptyResource.INSTANCE);
         log().warn("Missing resources/web-assets");
       }
     }
@@ -65,7 +72,9 @@ public class JettyRun extends BaseRunner {
       if (webXml == null) {
         webXml = Resource.newClassPathResource("/web-inf/web.xml");
       }
-      webapp.getMetaData().setWebXml(webXml);
+      if (webXml != null && webXml.exists())  {
+        webapp.getMetaData().setWebXml(webXml);
+      }
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

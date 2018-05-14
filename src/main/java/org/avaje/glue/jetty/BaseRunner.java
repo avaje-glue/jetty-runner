@@ -72,6 +72,8 @@ abstract class BaseRunner {
     this.httpPort = Integer.getInteger(WEBAPP_HTTP_PORT, DEFAULT_HTTP_PORT);
     this.contextPath = System.getProperty(WEBAPP_CONTEXT_PATH, DEFAULT_CONTEXT_PATH);
     this.secureCookies = Boolean.parseBoolean(System.getProperty(WEBAPP_SECURE_COOKIES, "true"));
+    this.webapp = new WebAppContext();
+    webapp.setThrowUnavailableOnStartupException(true);
   }
 
   /**
@@ -91,11 +93,10 @@ abstract class BaseRunner {
    * etc.
    */
   void createWebAppContext() {
-    webapp = new WebAppContext();
-    webapp.setThrowUnavailableOnStartupException(true);
     webapp.setServerClasses(getServerClasses());
     webapp.setContextPath(contextPath);
     webapp.setTempDirectory(createTempDir("jetty-app-"));
+    webapp.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
     setSecureCookies();
   }
 
@@ -159,6 +160,7 @@ abstract class BaseRunner {
 
     server = new Server(httpPort);
     server.setHandler(wrapHandlers());
+    //webapp.setClassLoader(this.getClass().getClassLoader());
 
     if (isWebSocketInClassPath()) {
       setupForWebSocket();
@@ -228,7 +230,7 @@ abstract class BaseRunner {
   }
 
   Logger log() {
-    return Log.getLogger("org.avaje.jettyrunner");
+    return Log.getLogger("org.avaje.glue.jetty");
   }
 
 }
