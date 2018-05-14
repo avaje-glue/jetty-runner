@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ServiceLoader;
 
 /**
  * Base class for runnable war (RunWar) and IDE jetty runner (JettyRun).
@@ -153,13 +154,21 @@ abstract class BaseRunner {
     return webapp;
   }
 
+  protected void attachServerLifecycleListeners() {
+    for(ContainerLifecycleListener lifecycleListener : ServiceLoader.load(ContainerLifecycleListener.class)) {
+      server.addLifeCycleListener(new JettyLifecyleAdapter(lifecycleListener));
+    }
+  }
+
   /**
    * Start the Jetty server.
    */
   void startServer() {
 
     server = new Server(httpPort);
+    attachServerLifecycleListeners();
     server.setHandler(wrapHandlers());
+
     //webapp.setClassLoader(this.getClass().getClassLoader());
 
     if (isWebSocketInClassPath()) {

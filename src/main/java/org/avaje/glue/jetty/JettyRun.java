@@ -1,13 +1,11 @@
 package org.avaje.glue.jetty;
 
 
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.util.resource.EmptyResource;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.io.File;
-import java.util.function.Consumer;
+import java.util.ServiceLoader;
 
 /**
  * Provides a Jetty Runner that can be used to run as a main method.
