@@ -5,15 +5,14 @@ import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.io.File;
-import java.util.ServiceLoader;
 
 /**
  * Provides a Jetty Runner that can be used to run as a main method.
  * <p>
- * Does not expect "war" packaging and instead we put:
+ * Does not expect "war" packaging and instead:
  * <ul>
- * <li>web.xml in resources/web-inf/web.xml</li>
- * <li>static assets in resources/web-assets</li>
+ * <li>web.xml in resources/META-INF/web.xml</li>
+ * <li>static content in resources/web</li>
  * </ul>
  */
 public class JettyRun extends BaseRunner {
@@ -57,20 +56,20 @@ public class JettyRun extends BaseRunner {
       webapp.setResourceBase(resourceBase);
 
     } else {
-      Resource base = Resource.newClassPathResource("/web-assets");
+      Resource base = Resource.newClassPathResource("/web");
       if (base != null && base.exists()) {
         webapp.setResourceBase(base.toString());
       } else {
-        webapp.setBaseResource(new NoResource());//EmptyResource.INSTANCE);
-        log().warn("Missing resources/web-assets");
+        webapp.setBaseResource(new NoResource());
+        log().debug("No static resources at no resources/web");
       }
     }
 
     try {
       if (webXml == null) {
-        webXml = Resource.newClassPathResource("/web-inf/web.xml");
+        webXml = Resource.newClassPathResource("/META-INF/web.xml");
       }
-      if (webXml != null && webXml.exists())  {
+      if (webXml != null && webXml.exists()) {
         webapp.getMetaData().setWebXml(webXml);
       }
     } catch (Exception e) {

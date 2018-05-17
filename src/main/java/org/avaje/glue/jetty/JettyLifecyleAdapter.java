@@ -2,6 +2,9 @@ package org.avaje.glue.jetty;
 
 import org.eclipse.jetty.util.component.LifeCycle;
 
+/**
+ * Adapts the Jetty lifecycle to Glue ContainerLifecycleListener.
+ */
 class JettyLifecyleAdapter implements LifeCycle.Listener {
 
   private final ContainerLifecycleListener listener;

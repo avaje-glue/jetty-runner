@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ServiceLoader;
 
 /**
- * Base class for runnable war (RunWar) and IDE jetty runner (JettyRun).
+ * Base class for running Jetty.
  */
 abstract class BaseRunner {
 
