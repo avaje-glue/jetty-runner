@@ -4,6 +4,8 @@ package org.avaje.glue.jetty;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import javax.websocket.DeploymentException;
+import javax.websocket.server.ServerEndpointConfig;
 import java.io.File;
 
 /**
@@ -48,6 +50,27 @@ public class JettyRun extends BaseRunner {
   }
 
   /**
+   * Return the number of active requests.
+   */
+  public int activeRequests() {
+    return activeRequestCount();
+  }
+
+  /**
+   * Wait for all active requests to complete with the default timeout.
+   */
+  public boolean waitForActiveRequests() {
+    return waitForActiveRequestsUntil();
+  }
+
+  /**
+   * Wait for all active requests to complete with the given timeout.
+   */
+  public boolean waitForActiveRequests(long timeout) {
+    return waitForActiveRequestsUntil(timeout);
+  }
+
+  /**
    * Setup for an expanded webapp with resource base as a relative path.
    */
   protected void setupForExpandedWar() {
@@ -77,6 +100,17 @@ public class JettyRun extends BaseRunner {
     }
 
     webapp.setParentLoaderPriority(false);
+  }
+
+  /**
+   * Add a Web socket endpoint.
+   */
+  public void addEndpoint(ServerEndpointConfig endpointConfig) throws DeploymentException {
+    if (serverContainer == null) {
+      webSocketEndpoints.add(endpointConfig);
+    } else {
+      serverContainer.addEndpoint(endpointConfig);
+    }
   }
 
   public JettyRun setWebXml(Resource webXml) {

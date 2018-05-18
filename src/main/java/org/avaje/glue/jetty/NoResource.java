@@ -3,15 +3,14 @@ package org.avaje.glue.jetty;
 import org.eclipse.jetty.util.resource.Resource;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.ReadableByteChannel;
 
 class NoResource extends Resource {
+
   @Override
-  public boolean isContainedIn(Resource resource) throws MalformedURLException {
+  public boolean isContainedIn(Resource resource) {
     return false;
   }
 
@@ -46,7 +45,7 @@ class NoResource extends Resource {
   }
 
   @Override
-  public File getFile() throws IOException {
+  public File getFile() {
     return null;
   }
 
@@ -56,12 +55,12 @@ class NoResource extends Resource {
   }
 
   @Override
-  public InputStream getInputStream() throws IOException {
+  public InputStream getInputStream() {
     return null;
   }
 
   @Override
-  public ReadableByteChannel getReadableByteChannel() throws IOException {
+  public ReadableByteChannel getReadableByteChannel() {
     return null;
   }
 
@@ -81,7 +80,7 @@ class NoResource extends Resource {
   }
 
   @Override
-  public Resource addPath(String s) throws IOException, MalformedURLException {
+  public Resource addPath(String s) {
     return this;
   }
 }
