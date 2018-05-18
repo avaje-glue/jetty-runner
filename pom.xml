@@ -8,14 +8,14 @@
 
   <groupId>org.avaje.glue</groupId>
   <artifactId>jetty-runner</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>jetty-runner</name>
   <url>https://github.com/avaje-glue</url>
   <description>Glue Jetty runner</description>
 
   <scm>
     <developerConnection>scm:git:git@github.com:avaje-glue/jetty-runner.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>jetty-runner-1.2</tag>
   </scm>
 
   <properties>
